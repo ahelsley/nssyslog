@@ -30,23 +30,23 @@ static Ns_TraceProc SysLogTrace;
 typedef struct CodeMap { int code, nscode; char *id, *nsid, *info; } CodeMap;
 
 /* Compare 2 text ids from CodeMap entries */
-static int Code_compare(const void *key, const void *elmt) {
+static int FindKeyInCodeMapIDs(const void *key, const void *elmt) {
 	return strcoll((const char *)key,
 				   ((const CodeMap *)elmt)->id);
 }
 
 #define SIZEOF_ARRAY(x) ((sizeof(x))/(sizeof(*x)))
 
-static int LookupCode(CodeMap *map, int n, const char *id, int dfalt) {
+static int LookupCodeForKey(CodeMap *map, int n, const char *key, int dfalt) {
 	CodeMap *found = NULL;
-	if (!map || n == 0 || !id
-		|| !(found = bsearch(id, map, n, sizeof(CodeMap), Code_compare)))
+	if (!map || n == 0 || !key
+		|| !(found = bsearch(key, map, n, sizeof(CodeMap), FindKeyInCodeMapIDs)))
 		return dfalt;
 	return found->code;
 }
 
 #define ConfigMap(ARRAY, NAME, DEFAULT)				\
-	(LookupCode((ARRAY),							\
+	(LookupCodeForKey((ARRAY),							\
 				SIZEOF_ARRAY((ARRAY)),				\
 				Ns_ConfigGetValue(path, (NAME)),	\
 				(DEFAULT)))
