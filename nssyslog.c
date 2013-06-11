@@ -1,4 +1,4 @@
-#include "ns.h"
+#include "ns.h"							/* -*-tab-width: 4-*- ex:ts=4:sw=4: */
 
 #include <stdlib.h>		/* for bsearch */
 #include <syslog.h>
